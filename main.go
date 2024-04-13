@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"os"
 )
@@ -53,11 +54,25 @@ func handleEncryption(){
 	if !validateFile(file){
 		panic("File not found")
 	}
+
+	password := getPassword()()
 }
 
 func handleDecryption(){}
 
-func getPassword(){}
+func getPassword() []byte{
+	fmt.Print("Enter password:")
+	password, _ := term.ReadPassword(0)
+	fmt.Print("Confirm password:")
+	confimrPassword, _ := term.ReadPassword(0)
+
+	if !validatePassword(password, confimrPassword){
+		fmt.Println("\nPasswords do not match. Please try again")
+		return getPassword()
+	}
+
+	return password
+}
 
 func validateFile(file string) bool {
 	if _, err := os.Stat(file); 
@@ -65,4 +80,10 @@ func validateFile(file string) bool {
 	return true
 }
 
-func validatePassword(){}
+func validatePassword(password []byte, confimrPassword []byte) bool{
+	if !bytes.Equal(password, confimrPassword){
+		return false
+	}
+
+	return true
+}
