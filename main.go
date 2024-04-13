@@ -43,12 +43,26 @@ func printHelp() {
 	fmt.Println("")
 }
 
-func handleEncryption(){}
+func handleEncryption(){
+	if len(os.Args) < 3 {
+		println("missing a required argument. For more info, run go run . help")
+		os.Exit(0)
+	}
+
+	file := os.Args[2]
+	if !validateFile(file){
+		panic("File not found")
+	}
+}
 
 func handleDecryption(){}
 
 func getPassword(){}
 
-func validateFile(){}
+func validateFile(file string) bool {
+	if _, err := os.Stat(file); 
+	os.IsNotExist(err){return false}
+	return true
+}
 
 func validatePassword(){}
